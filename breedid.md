@@ -57,7 +57,18 @@ We leveraged pretrained weights made available by PyTorch, but had to modify the
 
 The full training and testing code we used to comapre the models can be viewed in our Colab notebook [here](https://colab.research.google.com/drive/1n4Donev0PE45W8-coGbfZ-s5n1rdc0x8?usp=sharing).
 
-For each network we trained against the dataset, we generated plots for 
+For each network we trained against the dataset, we generated plots for Training Loss vs. Epoch and Validation Loss vs. Epoch. We utilized a 70-15-15 split for training, validation, and testing.
+
+The models we tested performed as follows:
+
+### ResNet-34
+![Training Loss vs. Epoch](https://github.com/albert-zhong/dog-breed-identification/blob/main/Training%20Loss%20vs%20Epoch%20-%20Modified%20Resnet-34.png?raw=true)
+
+![Validation Loss vs. Epoch](https://github.com/albert-zhong/dog-breed-identification/blob/main/Validation%20Loss%20vs%20Epoch%20-%20Modified%20Resnet-34.png?raw=true)
+
+The resulting accuracy for the network on the test set was roughly 79.17%.
+![](https://github.com/albert-zhong/dog-breed-identification/blob/main/Resnet-34%20Accuracy.png?raw=true)
+
 
 We define a function for summarizing the performance of the discriminator model. This function takes a sample of real galaxy images and generates the same number of fake galaxy images with the generator model and then evaluates the classification accuracy of the discriminator model and reports the score for each sample.
 
