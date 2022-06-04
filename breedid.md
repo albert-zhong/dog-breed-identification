@@ -85,7 +85,12 @@ The resulting accuracy for the network on the test set was roughly 79.68%.
 The resulting accuracy for the network on the test set was roughly 70.88%.
 ![](https://github.com/albert-zhong/dog-breed-identification/blob/main/Incepton-v3%20Accuracy.png?raw=true)
 
-## Final Thoughts
-With more time we would definitely continue training this network, maybe on some persistent computer for at least a week. This would also allow us to attempt to generate original sized images at 256x256. It would also be wise for us to try new models like to add batch normalization layers to the layers of the discriminator which is quite easy with keras.
 
-Thank you again to the whole team and to you for reading our report.
+
+## Challenges
+The main challenges came down to working with PyTorch to write clean, modularized code for plotting, training, and reshaping the output layer(s) of each network we intended to test against the dataset in question.
+
+In particular, the use of Inception-v3 proved to require a fair bit of debugging due to the fact that Inception-v3 has an auxiliary output layer that we had failed to recognize when we were selecting networks to train. The usual flow for changing the output layer to reflect the number of labels obviously neglected that layer, and as such we needed to change our training code to grab those outputs in order to have the destination variable match the shape of the output coming from the network. Moreover, a separate set of preprocessing transforms needed to be defined as the input sizes to the network were 299x299 as opposed to the 227x227 that both ResNet models took in.
+
+## Final Thoughts
+In general, it's no surprise that the pretrained weights for general image recognition were able to perform well in a generic classification environment. In general, it seems that under controlled hyperparameters of training, deeper architectures such as ResNet-50 with more physical weights that affect classification yield better results. If we were to repeat such an experiment in the future, we'd definitely look into resources for longer training, where we free the weights on the pretrained networks and have gradient descent perturb the weights across the entirety of the networks.
