@@ -53,11 +53,11 @@ We compared a few different common general models for image classification:
 
 We leveraged pretrained weights made available by PyTorch, but had to modify the networks to support predictions across 120 labels (the number of different breeds in the dataset). We took the fully-connected layers at the end of each network and removed them, replacing them with layers that have 120 outputs. From there, our training code takes the argmax over the output layer and deems that as the prediction made by the neural network in question.
 
-## Experiments and Evaluation
+## Experimental Setup and Results
 
 The full training and testing code we used to comapre the models can be viewed in our Colab notebook [here](https://colab.research.google.com/drive/1n4Donev0PE45W8-coGbfZ-s5n1rdc0x8?usp=sharing).
 
-For each network we trained against the dataset, we generated plots for Training Loss vs. Epoch and Validation Loss vs. Epoch. We utilized a 70-15-15 split for training, validation, and testing.
+For each network we trained against the dataset, we generated plots for Training Loss vs. Epoch and Validation Loss vs. Epoch. We utilized a 70-15-15 split for training, validation, and testing. All models were trained for 15 epochs of stochastic gradient descent with a learning rate of 0.01, momentum of 0, and weight decay of 0.0001.
 
 The models we tested performed as follows:
 
@@ -66,80 +66,24 @@ The models we tested performed as follows:
 
 ![Validation Loss vs. Epoch](https://github.com/albert-zhong/dog-breed-identification/blob/main/Validation%20Loss%20vs%20Epoch%20-%20Modified%20Resnet-34.png?raw=true)
 
-The resulting accuracy for the network on the test set was roughly 79.17%.
+The resulting accuracy for the network on the test set was roughly 75.6%.
 ![](https://github.com/albert-zhong/dog-breed-identification/blob/main/Resnet-34%20Accuracy.png?raw=true)
 
+### ResNet-50
+![Training Loss vs. Epoch](https://github.com/albert-zhong/dog-breed-identification/blob/main/Training%20Loss%20vs%20Epoch%20-%20Modified%20Resnet-50.png?raw=true)
 
-We define a function for summarizing the performance of the discriminator model. This function takes a sample of real galaxy images and generates the same number of fake galaxy images with the generator model and then evaluates the classification accuracy of the discriminator model and reports the score for each sample.
+![Validation Loss vs. Epoch](https://github.com/albert-zhong/dog-breed-identification/blob/main/Validation%20Loss%20vs%20Epoch%20-%20Modified%20Resnet-50.png?raw=true)
 
-This is an example of the loss values on real images and fake generated images for the discriminator and the generator for epoch 26
+The resulting accuracy for the network on the test set was roughly 79.68%.
+![](https://github.com/albert-zhong/dog-breed-identification/blob/main/Resnet-50%20Accuracy.png?raw=true)
 
-    >26, 1/138, d1=0.29638204, d2=0.32488263 g=3.45844007
-    >26, 2/138, d1=0.45061448, d2=0.88800186 g=4.71526003
-    >26, 3/138, d1=1.16259015, d2=0.06006718 g=4.13229275
-    >26, 4/138, d1=0.72051704, d2=0.09301022 g=2.78597784
-    >26, 5/138, d1=0.81719440, d2=0.22286285 g=2.34299660 … … …
-    >26, 134/138, d1=1.59510779, d2=0.09820783 g=2.37885666
-    >26, 135/138, d1=0.35758907, d2=0.54601729 g=2.40457916
-    >26, 136/138, d1=0.22124308, d2=0.10850765 g=2.61518002
-    >26, 137/138, d1=0.18373565, d2=0.13180479 g=2.34858227
-    >26, 138/138, d1=0.02594333, d2=0.20959115 g=2.79657221
-    
-This is an example of the model’s accuracy score for epoch 26 based on the discriminators ability to differentiate 
+### Inception-v3
+![Training Loss vs. Epoch](https://github.com/albert-zhong/dog-breed-identification/blob/main/Training%20Loss%20vs%20Epoch%20-%20Modified%20Inception-v3.png?raw=true)
 
-    >Accuracy real: 94%, fake: 100%
-    
+![Validation Loss vs. Epoch](https://github.com/albert-zhong/dog-breed-identification/blob/main/Validation%20Loss%20vs%20Epoch%20-%20Modified%20Inception-v3.png?raw=true)
 
-This is an example of the image produced by the model for epoch 26
-
-
-![epoch 26](https://raw.githubusercontent.com/inzombakura/inzombakura.github.io/main/assets/img/galaxygan_e26.png)
-
-## Results
-Epoch 11
-
-![epoch 11](https://raw.githubusercontent.com/inzombakura/inzombakura.github.io/main/assets/img/galaxygan_e11.png)
-
-Epoch 12
-
-![epoch 12](https://raw.githubusercontent.com/inzombakura/inzombakura.github.io/main/assets/img/galaxygan_e12.png)
-
-Epoch 13
-
-![epoch 13](https://raw.githubusercontent.com/inzombakura/inzombakura.github.io/main/assets/img/galaxygan_e13.png)
-
-Epoch 14
-
-![epoch 14](https://raw.githubusercontent.com/inzombakura/inzombakura.github.io/main/assets/img/galaxygan_e14.png)
-
-Epoch 15
-
-![epoch 15](https://raw.githubusercontent.com/inzombakura/inzombakura.github.io/main/assets/img/galaxygan_e15.png)
-
-The results after the first training process for 15 epochs yielded the following results and we can see that the quality of the images are not consecutively increasing and from my understanding, Epoch 13 out of the last five epochs had the best result with the least amount of noise in comparison to the colorful galaxy center. At this stage the galaxy isn’t very detailed and more like a cloud of color, with a ton of noise and repetition of small sections, introducing patterns.
-
-Epoch 41
-
-![epoch 41](https://raw.githubusercontent.com/inzombakura/inzombakura.github.io/main/assets/img/galaxygan_e41.png)
-
-Epoch 42
-
-![epoch 42](https://raw.githubusercontent.com/inzombakura/inzombakura.github.io/main/assets/img/galaxygan_e42.png)
-
-Epoch 43
-
-![epoch 43](https://raw.githubusercontent.com/inzombakura/inzombakura.github.io/main/assets/img/galaxygan_e43.png)
-
-Epoch 44
-
-![epoch 44](https://raw.githubusercontent.com/inzombakura/inzombakura.github.io/main/assets/img/galaxygan_e44.png)
-
-And finally...
-Epoch 45
-
-![epoch 45](https://raw.githubusercontent.com/inzombakura/inzombakura.github.io/main/assets/img/galaxygan_e45.png)
-
-These are the results after the second training process for an additional 35 epochs. We can see that the quality does get better and there is more detail but we can see issues with repeated patterns in Epoch 41 and 42. The last three are fairly good representations of galaxies, where Epoch 43 has a very clean image, with a detailed galaxy center with little outside noise. Epoch 44 has a bit of a problem with the patterns of the outside of the galaxy with the red spots but the galaxy center is really rich in color and detail. Epoch 45 is the combination of the last two, where the center is colorful and clear and the surrounding is pretty clean with minimal noise.
+The resulting accuracy for the network on the test set was roughly 70.88%.
+![](https://github.com/albert-zhong/dog-breed-identification/blob/main/Incepton-v3%20Accuracy.png?raw=true)
 
 ## Final Thoughts
 With more time we would definitely continue training this network, maybe on some persistent computer for at least a week. This would also allow us to attempt to generate original sized images at 256x256. It would also be wise for us to try new models like to add batch normalization layers to the layers of the discriminator which is quite easy with keras.
