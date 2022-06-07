@@ -89,7 +89,7 @@ Like before, the cross-entropy loss decreased and accuracy increased in every ep
 
 ResNet-50 seemed to perform the best, achieving a final accuracy of 0.815 on the test set. Inception v3 and ResNet-34 both seemed to perform slightly worse, with accuracies of 0.758, 0.747 respectively. All models took roughly 30 minutes to train. Nevertheless, under a different set of hyperparameters and training regimes, this ordering could change.
 
-What is interesting is that the test accuracy was slightly higher than the train accuracy for all three models. In addition, the cross-entropy loss for all three models actually increased during the course of training, yet the accuracy still improved with every epoch. 
+What is interesting is that the test accuracy was slightly higher than the train accuracy for all three models. This suggests we could have chosen a better split of training versus testing data. In addition, the cross-entropy loss for all three models actually increased during the course of training, yet the accuracy still improved with every epoch. This suggests we could have chosen better hyperparameters, since we should ideally see loss dropping for each epoch.
 
 ## Challenges
 The main challenge was writing clean code for reshaping the networks' output layers, training, and plotting results with PyTorch and matplotlib.  An additional challenge was fine-tuning model and training hyperparameters (i.e using Adam vs SGD for the optimizer, choice of learning rate, weight decay, momentum, batch size, etc). Even small changes in hyperparameters such as the weight decay induced large variances in model performance.
