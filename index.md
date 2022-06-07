@@ -20,9 +20,9 @@ tags: python pytorch
 
 ## Abstract and Background
 
-FGIC (Fine-Grained Image Classification) is a core problem in modern machine learning research and the discipline of computer vision in particular. The use of image data that is labeled for the purposes of predicting an attribute that is categorical seems clear at first, but presents a huge challenge when considering the amount of possible labels that can be assigned in addition to the distribution of data to both train and test approaches on.
+FGIC (Fine-Grained Image Classification) is a core problem in modern machine learning and computer vision. Assigning categorical labels to images is a straightforward problem to explain, but presents a huge challenge when considering the scale and complexity of image data.
 
-Neural networks (and more specifically, convolutional neural networks) are a key tool used in tackling fine-grained image classification problems. A general neural network architecture for image classification usually involves taking a preprocessed input (common transformations include square-cropping, rotations and zooms on image data to prevent overfitting) and then convolving, activating, and pooling the results to then transform the input into a different shape as to learn higher-order features present in the data. This smaller portion is then often repeated some number of times before one or more fully connected layers with a softmax-esque activation function that yields what can be considered output probabilities for each class of the dependent variable. An example image is presented below.
+Neural networks (and more specifically, convolutional neural networks) are a key tool used in tackling fine-grained image classification problems. A neural network architecture for image classification usually involves taking a preprocessed input and applying square-cropping, rotations and zooms to prevent overfitting. Then the network convolutes, activates, and pools the results to transform the input into a different shape as to learn higher-order features present in the data. This smaller portion is then repeated  before fully connected layer(s) with a softmax-esque activation function yield output probabilities for label. An example is presented:
 
 ![An example CNN architecture diagram](https://www.researchgate.net/publication/322848501/figure/fig2/AS:589054651420677@1517452981243/CNN-architecture-used-to-perform-image-classification-Ant-specimen-photograph-by-April.png)
 [[Source]](https://www.researchgate.net/figure/CNN-architecture-used-to-perform-image-classification-Ant-specimen-photograph-by-April_fig2_322848501)
@@ -32,26 +32,24 @@ Neural networks (and more specifically, convolutional neural networks) are a key
 Our goal is to evaluate multiple common image classification networks that are more general on their ability to perform dog breed identification on the [Stanford Dogs Dataset](http://vision.stanford.edu/aditya86/ImageNetDogs/).
 
 ## Data Source
-As mentioned above, we utilized the [Stanford Dogs Dataset](http://vision.stanford.edu/aditya86/ImageNetDogs/). It features 20850 images total across 120 dog breeds. There are roughly 150 images per dog breed in the dataset, a fairly even distribution, with some variation around that number.
+We used the [Stanford Dogs Dataset](http://vision.stanford.edu/aditya86/ImageNetDogs/) provided by Kaggle. It features $20,850$ images across $120$ dog breeds. There are roughly $150$ evenly distributed images per dog breed.
 
 ## Methodology
-In general, the workflow we mentioned in the abstract and background section follows in the approaches we took for our work here. 
-
-1. Gather Dataset
-2. Preprocess Training/Validation/Test Datasets
+1. Gather dataset
+2. Preprocess training/validation/testing datasets
     1. Cropping
     2. Flipping
     3. Rotation
-3. Train
-4. Evaluate Performance
+3. Experiment with different optimizers and model hyperparameters on validation set
+3. Train on training set
+4. Evaluate performance on testing set
 
-We compared a few different common general models for image classification:
-
+We compared three common, general models for image classification:
 * ResNet-34
 * ResNet-50
 * Inception-v3
 
-We leveraged pretrained weights made available by PyTorch, but had to modify the networks to support predictions across 120 labels (the number of different breeds in the dataset). We took the fully-connected layers at the end of each network and removed them, replacing them with layers that have 120 outputs. From there, our training code takes the argmax over the output layer and deems that as the prediction made by the neural network in question.
+We leveraged pre-trained weights made available by PyTorch, but modified the networks to support predictions across 120 labels (the number of different breeds in the dataset). We removed the fully-connected layers at the end of each network and replaced them with layers that have 120 outputs. From there, our training code takes the argmax over the output layer and uses that label as the final prediction.
 
 ## Experimental Setup and Results
 
@@ -62,20 +60,19 @@ For each network we trained against the dataset, we generated plots for Training
 The models we tested performed as follows:
 
 ### ResNet-34
-![Training Loss vs. Epoch](https://github.com/albert-zhong/dog-breed-identification/blob/main/Training%20Loss%20vs%20Epoch%20-%20Modified%20Resnet-34.png?raw=true)
 
-![Validation Loss vs. Epoch](https://github.com/albert-zhong/dog-breed-identification/blob/main/Validation%20Loss%20vs%20Epoch%20-%20Modified%20Resnet-34.png?raw=true)
+On the validation set, cross-entropy loss decreased and accuracy increased in every epoch. The model achieved a high accuracy of $94.0\%$ on the validation set. The model performed worse on the training set, which is expected given that it should be more difficult to generalize a model to a larger dataset. The accuracy of ResNet-34 increased in every epoch on the training set, reaching a final accuracy of $73.5\%$. 
 
-The resulting accuracy for the network on the test set was roughly 75.6%.
+Suprisingly, the loss also increased in every epoch. While loss and accuracy should intuitively seem be inversely correlated, this scenario is still possible. Accuracy on a dataset just checks if the highest softmax output matches the correctly labelled class. In contrast, cross-entropy loss takes into account how high the softmax output is, which can be seen as how confident the model is on a particular dog breed. Since both accuracy and loss increased on the training set, we interpret this as the model overfitting to the training set. While the model ends up making better final guesses, the "degree" to which it is confident that a dog is a specific breed is faulty.
+
+The model took roughly $30$ minutes to train on the training set.
+
+The final test accuracy of ResNet-34 was $74.7\%$, which is actually slighly better than the accuracy on the training set.
 ![](https://github.com/albert-zhong/dog-breed-identification/blob/main/Resnet-34%20Accuracy.png?raw=true)
 
 ### ResNet-50
-![Training Loss vs. Epoch](https://github.com/albert-zhong/dog-breed-identification/blob/main/Training%20Loss%20vs%20Epoch%20-%20Modified%20Resnet-50.png?raw=true)
 
-![Validation Loss vs. Epoch](https://github.com/albert-zhong/dog-breed-identification/blob/main/Validation%20Loss%20vs%20Epoch%20-%20Modified%20Resnet-50.png?raw=true)
-
-The resulting accuracy for the network on the test set was roughly 79.68%.
-![](https://github.com/albert-zhong/dog-breed-identification/blob/main/Resnet-50%20Accuracy.png?raw=true)
+Like before, the cross-entropy loss decreased and accuracy increased in every epoch on the validation set. The loss decreased more sharply compared to ResNet-34. The model achieved a very high accuracy of $99\%$ on the validation set, and an accuracy of $0.782\%$ on the training set. It achieved a final accuracy of $81.5\%$ on the test set. Clearly ResNet-50 performed slightly better than ResNet-34, which makes sense given that ResNet-50 has 50 layers while ResNet-34 only has 34 layers. The training time was nearly the same, only taking $31$ minutes to train on the training set.
 
 ### Inception-v3
 ![Training Loss vs. Epoch](https://github.com/albert-zhong/dog-breed-identification/blob/main/Training%20Loss%20vs%20Epoch%20-%20Modified%20Inception-v3.png?raw=true)
@@ -85,12 +82,21 @@ The resulting accuracy for the network on the test set was roughly 79.68%.
 The resulting accuracy for the network on the test set was roughly 70.88%.
 ![](https://github.com/albert-zhong/dog-breed-identification/blob/main/Incepton-v3%20Accuracy.png?raw=true)
 
+### Results
 
+### Model accuracy
+| Model        | Validation | Train | Test  |
+|--------------|------------|-------|-------|
+| ResNet-34    | 0.940      | 0.735 | 0.747 |
+| ResNet-50    | 0.990      | 0.782 | 0.815 |
+| Inception v3 |            |       |       |
+
+ResNet-50 seemed to perform the best, achieving a final accuracy of $0.815$ on the test set. Inception v3 seemed to perform the worst. All models took roughly $30$ minutes to train. Nevertheless, under a different set of hyperparameters and training regimes, this ordering could change.
 
 ## Challenges
-The main challenges came down to working with PyTorch to write clean, modularized code for plotting, training, and reshaping the output layer(s) of each network we intended to test against the dataset in question.
+The main challenge was writing clean code for reshaping the networks' output layers, training, and plotting results with PyTorch and matplotlib.  An addition challenge was fine-tuning model and training hyperparameters (i.e using Adam vs SGD for the optimizer, choice of learning rate, weight decay, momentum, batch size, etc). Even small changes in hyperparameters such as the weight decay induced large variances in model performance.
 
-In particular, the use of Inception-v3 proved to require a fair bit of debugging due to the fact that Inception-v3 has an auxiliary output layer that we had failed to recognize when we were selecting networks to train. The usual flow for changing the output layer to reflect the number of labels obviously neglected that layer, and as such we needed to change our training code to grab those outputs in order to have the destination variable match the shape of the output coming from the network. Moreover, a separate set of preprocessing transforms needed to be defined as the input sizes to the network were 299x299 as opposed to the 227x227 that both ResNet models took in.
+In particular, Inception v3 required a fair bit of debugging due to the fact that it supplied an auxiliary output layer that we had failed to recognize when we were selecting networks to train. The usual flow for changing the output layer to reflect the number of labels obviously neglected that layer, and as such we needed to change our training code to grab those outputs in order to have the destination variable match the shape of the output coming from the network. Moreover, a separate set of preprocessing transforms needed to be defined as the input sizes to the network were 299x299 as opposed to the 227x227 that both ResNet models took in.
 
 ## Final Thoughts
-In general, it's no surprise that the pretrained weights for general image recognition were able to perform well in a generic classification environment. In general, it seems that under controlled hyperparameters of training, deeper architectures such as ResNet-50 with more physical weights that affect classification yield better results. If we were to repeat such an experiment in the future, we'd definitely look into resources for longer training, where we free the weights on the pretrained networks and have gradient descent perturb the weights across the entirety of the networks.
+It's no surprise that the pretrained weights for general image recognition performed well in a generic classification environment. In general, it seems that under controlled hyperparameters of training, deeper architectures such as ResNet-50 with more physical weights that affect classification yield better results. If we were to repeat such an experiment in the future, we'd definitely look into resources for longer training, where we free the weights on the pretrained networks and have gradient descent perturb the weights across the entirety of the networks. In additon, we would spend more time exploring different optimization and regularization techniques (i.e stochastic gradient descent vs. Adam) to prevent over/underfitting.
