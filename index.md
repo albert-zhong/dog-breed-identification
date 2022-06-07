@@ -16,7 +16,7 @@ tags: python pytorch
 
 ## Video
 
-[![Project Video Presentation](http://img.youtube.com/vi/pWN0kjnHRRs/0.jpg)](https://youtu.be/pWN0kjnHRRs "Video")
+[![Presentation](http://img.youtube.com/vi/BasmPkUWD0o/0.jpg)](https://youtu.be/BasmPkUWD0o "Video")
 
 ## Abstract and Background
 
@@ -55,11 +55,13 @@ We leveraged pre-trained weights made available by PyTorch, but modified the net
 
 The full training and testing code we used to comapre the models can be viewed in our Colab notebook [here](https://colab.research.google.com/drive/1n4Donev0PE45W8-coGbfZ-s5n1rdc0x8?usp=sharing).
 
-For each network we trained against the dataset, we generated plots for Training Loss vs. Epoch and Validation Loss vs. Epoch. We utilized a 70-15-15 split for training, validation, and testing. All models were trained for 15 epochs of stochastic gradient descent with a learning rate of 0.01, momentum of 0, and weight decay of 0.0001.
-
-The models we tested performed as follows:
+For each network we trained against the dataset, we generated plots for Training Loss vs. Epoch and Validation Loss vs. Epoch. We utilized a 70-15-15 split for training, validation, and testing. All models were trained for $15$ epochs of stochastic gradient descent with a learning rate of $0.01$, momentum of $0$, and weight decay of $0.0001$.
 
 ### ResNet-34
+
+![ResNet-34 cross-entropy loss](resnet_34_loss.png)
+
+![ResNet-34 accuracy](resnet_34_accuracy.png)
 
 On the validation set, cross-entropy loss decreased and accuracy increased in every epoch. The model achieved a high accuracy of $94.0\%$ on the validation set. The model performed worse on the training set, which is expected given that it should be more difficult to generalize a model to a larger dataset. The accuracy of ResNet-34 increased in every epoch on the training set, reaching a final accuracy of $73.5\%$. 
 
@@ -68,18 +70,27 @@ Suprisingly, the loss also increased in every epoch. While loss and accuracy sho
 The model took roughly $30$ minutes to train on the training set.
 
 The final test accuracy of ResNet-34 was $74.7\%$, which is actually slighly better than the accuracy on the training set.
-![](https://github.com/albert-zhong/dog-breed-identification/blob/main/Resnet-34%20Accuracy.png?raw=true)
 
 ### ResNet-50
+
+![ResNet-34 cross-entropy loss](resnet_50_loss.png)
+
+![ResNet-34 accuracy](resnet_50_accuracy.png)
 
 Like before, the cross-entropy loss decreased and accuracy increased in every epoch on the validation set. The loss decreased more sharply compared to ResNet-34. The model achieved a very high accuracy of $99\%$ on the validation set, and an accuracy of $0.782\%$ on the training set. It achieved a final accuracy of $81.5\%$ on the test set. Clearly ResNet-50 performed slightly better than ResNet-34, which makes sense given that ResNet-50 has 50 layers while ResNet-34 only has 34 layers. The training time was nearly the same, only taking $31$ minutes to train on the training set.
 
 ### Inception-v3
+
+![ResNet-34 cross-entropy loss](inception_loss.png)
+
+![ResNet-34 accuracy](inception_accuracy.png)
+
 Like before, the cross-entropy loss decreased and accuracy increased in every epoch on the validation set. The loss decreased more slowly compared to other models. The model achieved a very high accuracy of $0.95$ on the validation set, and an accuracy of $0.708$ on the training set. It achieved a final accuracy of $0.758$ on the test set. Inception took roughly $33$ minutes to train.
 
 ### Results and analysis
 
-### Model accuracy
+![Model accuracies](accuracies.png)
+
 | Model        | Validation | Train | Test  |
 |--------------|------------|-------|-------|
 | ResNet-34    | 0.940      | 0.735 | 0.747 |
@@ -93,7 +104,7 @@ What is interesting is that the test accuracy was slightly higher than the train
 ## Challenges
 The main challenge was writing clean code for reshaping the networks' output layers, training, and plotting results with PyTorch and matplotlib.  An addition challenge was fine-tuning model and training hyperparameters (i.e using Adam vs SGD for the optimizer, choice of learning rate, weight decay, momentum, batch size, etc). Even small changes in hyperparameters such as the weight decay induced large variances in model performance.
 
-In particular, Inception v3 required a fair bit of debugging due to the fact that it supplied an auxiliary output layer that we had failed to recognize when we were selecting networks to train. The usual flow for changing the output layer to reflect the number of labels obviously neglected that layer, and as such we needed to change our training code to grab those outputs in order to have the destination variable match the shape of the output coming from the network. Moreover, a separate set of preprocessing transforms needed to be defined as the input sizes to the network were 299x299 as opposed to the 227x227 that both ResNet models took in.
+In particular, Inception v3 required a fair bit of debugging due to the fact that it supplied an auxiliary output layer that we had failed to recognize when we were selecting networks to train. The usual flow for changing the output layer to reflect the number of labels obviously neglected that layer, and as such we needed to change our training code to grab those outputs in order to have the destination variable match the shape of the output coming from the network. Moreover, a separate set of preprocessing transforms needed to be defined as the input sizes to the network were $299 \times 299$ as opposed to the $227 \times 227$ that both ResNet models took in.
 
 ## Final Thoughts
 It's no surprise that the pretrained weights for general image recognition performed well in a generic classification environment. In general, it seems that under controlled hyperparameters of training, deeper architectures such as ResNet-50 with more physical weights that affect classification yield better results. If we were to repeat such an experiment in the future, we'd definitely look into resources for longer training, where we free the weights on the pretrained networks and have gradient descent perturb the weights across the entirety of the networks. In additon, we would spend more time exploring different optimization and regularization techniques (i.e stochastic gradient descent vs. Adam) to prevent over/underfitting.
