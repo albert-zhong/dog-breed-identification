@@ -111,6 +111,7 @@ Like before, the cross-entropy loss decreased and accuracy increased in every ep
 
 ![Model accuracies](accuracies.png)
 
+#### Accuracy across datasets and models
 | Model        | Validation | Train | Test  |
 |--------------|------------|-------|-------|
 | ResNet-34    | 0.940      | 0.735 | 0.747 |
