@@ -1,13 +1,3 @@
----
-title: Dog Breed Identification Using Neural Networks
-layout: post
-date: '2022-06-05 15:12:11 +0800'
-categories:
-- Projects
-tags: python pytorch
----
-
-
 # Dog Breed Identification
 
 *Created by: Armand Mousavi (amousavi@cs), Vivek Patel (vivekp@cs), and Albert Zhong (azhong@cs)*
