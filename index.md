@@ -43,7 +43,37 @@ We leveraged pre-trained weights made available by PyTorch, but modified the net
 
 ## Experimental Setup and Results
 
-The full training and testing code we used to compare the models can be viewed in our Colab notebook [here](https://colab.research.google.com/drive/1n4Donev0PE45W8-coGbfZ-s5n1rdc0x8?usp=sharing).
+The full training and testing code we used to compare the models can be viewed in our Colab notebook [here](https://colab.research.google.com/drive/1n4Donev0PE45W8-coGbfZ-s5n1rdc0x8?usp=sharing). As an example, here is our main training function:
+```python
+def train(model, criterion, optimizer, loader, epochs: int):
+  losses = []  # per-epoch loss
+  accuracies = []  # per-epoch accuracy
+
+  for epoch in range(epochs):  # loop over the dataset multiple times
+    epoch_loss = 0
+    num_correct = 0
+    num_total = 0
+
+    for batch in tqdm(loader):
+      inputs, labels = batch
+      inputs, labels = inputs.to(device), labels.to(device)
+      # forward + backward + optimize
+      outputs = model(inputs)
+      loss = criterion(outputs, labels)
+      loss.backward()
+      epoch_loss += outputs.shape[0] * loss.item()
+      optimizer.step()
+      num_correct += torch.eq(torch.argmax(outputs.data, dim=1), labels).sum().item()
+      num_total += labels.size(0)
+
+    epoch_loss /= len(loader)
+    accuracy = num_correct / num_total
+    losses.append(epoch_loss)
+    accuracies.append(accuracy)
+    print(f'epoch: {epoch + 1}, loss: {epoch_loss}, accuracy: {accuracy}')
+
+  return losses, accuracies
+```
 
 For each network we trained against the dataset, we generated plots for Training Loss vs. Epoch and Validation Loss vs. Epoch. We utilized a 70-15-15 split for training, validation, and testing. All models were trained for 15 epochs of stochastic gradient descent with a learning rate of 0.01, momentum of 0, and weight decay of 0.0001.
 
