@@ -75,23 +75,20 @@ The final test accuracy of ResNet-34 was $74.7\%$, which is actually slighly bet
 Like before, the cross-entropy loss decreased and accuracy increased in every epoch on the validation set. The loss decreased more sharply compared to ResNet-34. The model achieved a very high accuracy of $99\%$ on the validation set, and an accuracy of $0.782\%$ on the training set. It achieved a final accuracy of $81.5\%$ on the test set. Clearly ResNet-50 performed slightly better than ResNet-34, which makes sense given that ResNet-50 has 50 layers while ResNet-34 only has 34 layers. The training time was nearly the same, only taking $31$ minutes to train on the training set.
 
 ### Inception-v3
-![Training Loss vs. Epoch](https://github.com/albert-zhong/dog-breed-identification/blob/main/Training%20Loss%20vs%20Epoch%20-%20Modified%20Inception-v3.png?raw=true)
+Like before, the cross-entropy loss decreased and accuracy increased in every epoch on the validation set. The loss decreased more slowly compared to other models. The model achieved a very high accuracy of $0.95$ on the validation set, and an accuracy of $0.708$ on the training set. It achieved a final accuracy of $0.758$ on the test set. Inception took roughly $33$ minutes to train.
 
-![Validation Loss vs. Epoch](https://github.com/albert-zhong/dog-breed-identification/blob/main/Validation%20Loss%20vs%20Epoch%20-%20Modified%20Inception-v3.png?raw=true)
-
-The resulting accuracy for the network on the test set was roughly 70.88%.
-![](https://github.com/albert-zhong/dog-breed-identification/blob/main/Incepton-v3%20Accuracy.png?raw=true)
-
-### Results
+### Results and analysis
 
 ### Model accuracy
 | Model        | Validation | Train | Test  |
 |--------------|------------|-------|-------|
 | ResNet-34    | 0.940      | 0.735 | 0.747 |
 | ResNet-50    | 0.990      | 0.782 | 0.815 |
-| Inception v3 |            |       |       |
+| Inception v3 | 0.950      | 0.708 | 0.758 |
 
-ResNet-50 seemed to perform the best, achieving a final accuracy of $0.815$ on the test set. Inception v3 seemed to perform the worst. All models took roughly $30$ minutes to train. Nevertheless, under a different set of hyperparameters and training regimes, this ordering could change.
+ResNet-50 seemed to perform the best, achieving a final accuracy of $0.815$ on the test set. Inception v3 and ResNet-34 both seemed to perform slightly worse, with accuracies of $0.758, 0.747$ respectively. All models took roughly $30$ minutes to train. Nevertheless, under a different set of hyperparameters and training regimes, this ordering could change.
+
+What is interesting is that the test accuracy was slightly higher than the train accuracy for all three models. In addition, the cross-entropy loss for all three models actually increased during the course of training, yet the accuracy still improved with every epoch. 
 
 ## Challenges
 The main challenge was writing clean code for reshaping the networks' output layers, training, and plotting results with PyTorch and matplotlib.  An addition challenge was fine-tuning model and training hyperparameters (i.e using Adam vs SGD for the optimizer, choice of learning rate, weight decay, momentum, batch size, etc). Even small changes in hyperparameters such as the weight decay induced large variances in model performance.
